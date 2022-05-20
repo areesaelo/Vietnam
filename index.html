@@ -1,0 +1,329 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<!-- Link library leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin="" />
+
+ <!-- W3 CSS template -->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin="">
+</script>
+
+ <style>
+#mapid {
+height: 800px;
+}
+</style>
+<title>Tourist map</title>
+</head>
+<body>
+<br>
+  <center><h1 style="color: white;">สถานที่ท่องเที่ยวเวียดนาม🚙🚕🚗ツ</h1></center>
+    <body bgcolor ='6699FF'>
+<br>
+<!-- แบ่งหน้าจอ -->
+<div class="w3-row">
+<div id="mapid" class="w3-half"></div>
+<div id="content" class="w3-half">
+<table class="w3-table w3-striped">
+<tr>
+<th>ชื่อแหล่งท่องเที่ยว</th>
+<th>ประเภท</th>
+<th>ระดับ</th>
+</tr>
+<tr>
+<td>น้ำตก A</td>
+<td>ธรรมชาติ</td>
+<td>A</td>
+</tr>
+</table>
+</div>
+</div>
+
+<!-- เรียกแผนที่ขึ้นมาแสดง -->
+<script>
+//เรียกแผนที่
+var map = L.map("mapid").setView([14.716359417313907,107.84641401475811],8);
+//basemap1
+var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+//basemap2
+var memomaps = L.tileLayer("https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png")
+.addTo(map);
+//group layers (1+2)
+var baseMaps ={
+  //ชื่อชั้นข้อมูล : ตัวแปร
+  OSM:osm,
+  OPNVKarte:memomaps,
+};
+//add data
+var tourpoint = {
+type: "FeatureCollection",
+name: "tour_plk",
+crs: {
+type: "name",
+properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+},
+features: [
+{
+type: "Feature",
+properties: {
+Name: "หมีเซิน (My Son)",
+Type: "โบราณสถาน",
+FID_1: 1358.0,
+CHANGWAT: "เวียดนาม",
+PROVINCE_1: "Vietnam",
+REGION: "ประเทศเวียดนาม",
+level: "🌟🌟🌟🌟",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[108.12446043903803,15.764534921370167]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "ญาจาง (Nha Trang)",
+Type: "ท่องเที่ยวทางทะเล",
+FID_1: 1357.0,
+CHANGWAT: "เวียดนาม",
+PROVINCE_1: "Vietnam",
+REGION: "ประเทศเวียดนาม",
+level: "🌟🌟🌟🌟",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[109.19636317671524,12.274866903184229]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "ซาปา (Sapa)",
+Type: "สถานที่สำคัญทางประวัติศาสตร์",
+FID_1: 1362.0,
+CHANGWAT: "เวียดนาม",
+PROVINCE_1: "Vietnam",
+REGION: "ประเทศเวียดนาม",
+level: "🌟🌟🌟🌟",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[103.7915317023137,22.366658266826477]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "ฮอยอัน (Hoi An)",
+Type: "สถานที่สำคัญทางประวัติศาสตร",
+FID_1: 1364.0,
+CHANGWAT: "เวียดนาม",
+PROVINCE_1: "Vietnam",
+REGION: "ประเทศเวียดนาม",
+level: "🌟🌟🌟🌟",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[108.32814908895297,15.882290412420657]],
+},
+},
+{
+type: "Feature",
+properties: {
+Name: "ฮาลอง เบย์ (Ha Long Bay)",
+Type: "แหล่งท่องเทียวธรรมชาติ",
+FID_1: 1355.0,
+CHANGWAT: "เวียดนาม",
+PROVINCE_1: "Vietnam",
+REGION: "ประเทศเวียดนาม",
+level: "🌟🌟🌟🌟",
+},
+geometry: {
+type: "MultiPoint",
+coordinates: [[107.1854998837991,20.92317009690893]],
+},
+},
+],
+};
+//add marker and popup
+var tourLayer = L.geoJSON(tourpoint, {
+pointToLayer: function (feature, latlng) {
+return L.marker(latlng).bindPopup(feature.properties.Name);
+},
+onEachFeature: function (feature, layer) {
+layer.on("mouseover", function () {
+document
+.getElementById(feature.properties.FID_1)
+.classList.add("w3-red");
+});
+
+ layer.on("mouseout", function () {
+document
+.getElementById(feature.properties.FID_1)
+.classList.remove("w3-red");
+});
+},
+}).addTo(map);
+// link lable with popup control
+var cont = "";
+cont += "<table class='w3-table w3-striped'>";
+cont += "<tr>";
+cont += "<th>ชื่อแหล่งท่องเที่ยว</th>";
+cont += "<th>ประเภท</th>";
+cont += "<th>ระดับ</th>";
+cont += "</tr>";
+for (let i in tourpoint.features) {
+cont += "<tr id=" + tourpoint.features[i].properties.FID_1 + ">";
+cont += "<td>" + tourpoint.features[i].properties.Name + "</td>";
+cont += "<td>" + tourpoint.features[i].properties.Type + "</td>";
+cont += "<td>" + tourpoint.features[i].properties.level + "</td>";
+cont += "</tr>";
+}
+cont += "</table>";
+console.log(cont);
+document.getElementById("content").innerHTML = cont;
+//create polygon
+var polygonGeoJson =
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.083984375,
+              17.26672782352052
+            ],
+            [
+              107.22656249999999,
+              15.114552871944115
+            ],
+            [
+              107.75390625,
+              13.15437605541853
+            ],
+            [
+              106.69921875,
+              11.43695521614319
+            ],
+            [
+              104.67773437499999,
+              10.228437266155943
+            ],
+            [
+              105.64453124999999,
+              9.535748998133627
+            ],
+            [
+              106.34765625,
+              10.228437266155943
+            ],
+            [
+              108.6328125,
+              11.350796722383672
+            ],
+            [
+              109.248046875,
+              13.068776734357694
+            ],
+            [
+              108.19335937499999,
+              15.749962572748768
+            ],
+            [
+              106.3037109375,
+              17.727758609852284
+            ],
+            [
+              105.732421875,
+              18.812717856407776
+            ],
+            [
+              106.0400390625,
+              20.097206227083888
+            ],
+            [
+              107.138671875,
+              21.69826549685252
+            ],
+            [
+              105.908203125,
+              23.039297747769726
+            ],
+            [
+              103.18359375,
+              22.917922936146045
+            ],
+            [
+              102.041015625,
+              22.917922936146045
+            ],
+            [
+              103.4033203125,
+              21.3303150734318
+            ],
+            [
+              104.67773437499999,
+              20.138470312451155
+            ],
+            [
+              104.19433593749999,
+              19.394067895396613
+            ],
+            [
+              106.083984375,
+              17.26672782352052
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+var polygonLayer = L.geoJSON(polygonGeoJson, {
+style: function (feature) {
+return {fillcolor:'pink',weight:2,
+       opacity: 1,
+       color:'red',//Outline bgcolor
+       fillOpacity: 0.4 };
+},
+onEachFeature: function (feature, layer) {
+layer.bindPopup(feature.properties.name);
+
+ layer.on("mouseover", function () {
+layer.openPopup();
+});
+
+ layer.on("mouseout", function () {
+layer.closePopup();
+});
+},
+});
+
+//group point+polygon layer
+var overlays = {
+สถานที่ท่องเที่ยว:tourLayer,
+ขอบเขตประเทศเวียดนาม:polygonLayer
+};
+
+//Create layer control
+L.control.layers(baseMaps,overlays).addTo(map);
+
+</script>
+
+</body>
+</html>
